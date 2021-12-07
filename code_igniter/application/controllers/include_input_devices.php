@@ -259,6 +259,39 @@ if (empty($i)) {
     }
 }
 
+/* EK: custom fields update */
+if(isset($json->custom_fields) && is_array($json->custom_fields) && count($json->custom_fields) > 1) {
+    $sql = 'SELECT `id`, `name`, `group_id` FROM `fields` WHERE `org_id` = ?';
+    $fields = $this->db->query($sql, [$details->org_id ?: 1])->result();
+    if(!empty($fields)) {
+        $fields_array = [];
+        foreach($fields as $field)
+            $fields_array[trim($field->name)] = $field;
+        $fields = null;
+        foreach($json->custom_fields[0] as $fieldName => $value) {
+            if(isset($fields_array[$fieldName])) {
+                $field = $fields_array[$fieldName];
+                $sql = 'SELECT `sql` FROM `groups` WHERE `id` = ?';
+                $result = $this->db->query($sql, [intval($field->group_id)])->result();
+                $test_sql = str_replace('@filter', 'system.org_id = ?', $result[0]->sql).' AND system.id = ?';
+                $result = $this->db->query($test_sql, [intval($details->org_id ?: 1), $details->id])->result();
+                if(!empty($result)) {
+                    $sql = 'SELECT `id`, `value`, `fields_id` FROM `field` WHERE `system_id` = ? AND `fields_id` = ?';
+                    $result = $this->db->query($sql, [$details->id, intval($field->id)])->result();
+                    if (isset($result[0]->value)) {
+                        $sql = 'UPDATE `field` SET `value` = ?, `timestamp` = NOW() WHERE `id` = ?';
+                        $this->db->query($sql, [(string)$value, $result[0]->id]);
+                    } else {
+                        $sql = 'INSERT INTO `field` VALUES (NULL, ?, ?, NOW(), ?)';
+                        $this->db->query($sql, [$details->id, intval($field->id), (string)$value]);
+                    }
+                }
+            }
+        }
+    }
+}
+/* EK: custom fields update */
+
 if ( ! empty($ids)) {
     $sql = 'UPDATE discovery_log SET system_id = ?, ip = ? WHERE id IN (' . implode(',', $ids) . ')';
     $query = $this->db->query($sql, array($details->id, (string)$log->ip));
