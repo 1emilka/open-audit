@@ -260,7 +260,7 @@ if (empty($i)) {
 }
 
 /* EK: custom fields update */
-if(isset($json->custom_fields) && is_array($json->custom_fields) && count($json->custom_fields) > 1) {
+if(isset($json->custom_fields) && is_array($json->custom_fields) && count($json->custom_fields) >= 1) {
     $sql = 'SELECT `id`, `name`, `group_id` FROM `fields` WHERE `org_id` = ?';
     $fields = $this->db->query($sql, [$details->org_id ?: 1])->result();
     if(!empty($fields)) {
