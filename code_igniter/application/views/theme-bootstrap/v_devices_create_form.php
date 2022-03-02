@@ -366,17 +366,17 @@
                 </div>
             </div>
             <div id="url_input" style="display:none;">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="url" class="col-sm-3 control-label"><?php echo __('URL'); ?></label>
-                        <div class="col-sm-8">
-                            <textarea class="form-control" rows="10" name="url" id="url"></textarea>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="url" class="col-sm-3 control-label"><?php echo __('URL'); ?></label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" rows="10" name="url" id="url"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
             <div id="submit_button" style="display:none;">
                 <hr />
                 <div class="row">

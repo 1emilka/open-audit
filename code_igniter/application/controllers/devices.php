@@ -309,6 +309,13 @@ class Devices extends MY_Controller
             include 'include_input_devices.php';
         }
 
+        if ( ! empty($_POST['input_type']) && $_POST['input_type'] === 'url_input') {
+            unset($_POST['data']);
+            unset($_FILES);
+            $discovery_id = null;
+            include 'include_input_devices.php';
+        }
+
         $log = new stdClass();
         $log->type = 'system';
         $log->detail = 'Finished creating device.';
