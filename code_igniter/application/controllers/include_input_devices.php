@@ -109,6 +109,23 @@ if ( ! empty($_POST['input_type']) && $_POST['input_type'] === 'file_input') {
     }
 }
 
+// получение данных по ссылке
+if ( ! empty($_POST['input_type']) && $_POST['input_type'] === 'url_input') {
+    $target_path = !empty($_POST['url']) ? $_POST['url'] : '';
+    $ok = false;
+    try {
+        $input = file_get_contents($target_path);
+        $ok = !empty($input);
+    } catch (\Exception $exception) {
+        $ok = false;
+        print_r($exception->getMessage());
+    }
+    if (!$ok) {
+        log_error('ERR-0011');
+        print_r($this->response->errors);
+    }
+}
+
 $log = new stdClass();
 $log->discovery_id = null;
 $log->system_id = null;
