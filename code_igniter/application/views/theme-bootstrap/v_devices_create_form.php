@@ -58,6 +58,7 @@
                                 <option value="manual_input"><?php echo __('Manual Input'); ?></option>
                                 <option value="audit_input"><?php echo __('Copy and paste an audit result'); ?></option>
                                 <option value="file_input"><?php echo __('Upload an audit result file'); ?></option>
+                                <option value="url_input"><?php echo __('Upload by URL'); ?></option>
                             </select>
                         </div>
                     </div>
@@ -364,6 +365,18 @@
                     </div>
                 </div>
             </div>
+            <div id="url_input" style="display:none;">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="url" class="col-sm-3 control-label"><?php echo __('URL'); ?></label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="10" name="url" id="url"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div id="submit_button" style="display:none;">
                 <hr />
                 <div class="row">
