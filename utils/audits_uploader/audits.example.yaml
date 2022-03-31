@@ -1,0 +1,6 @@
+dir: ./audits
+url_prefix: https://storage.yandexcloud.net/emilka/audits
+endpoint: http://10.10.23.250/open-audit/index.php/input/devices
+delay: 0
+audits:
+  - 5-4-411-00428525-20211206180206.xml
