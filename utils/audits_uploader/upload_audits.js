@@ -11,8 +11,8 @@ try {
   console.error(e);
   return 1;
 }
-if(!configuration.hasOwnProperty('dir')) {
-	console.error(new Error('`dir` field'));
+if(!configuration.hasOwnProperty('endpoint')) {
+	console.error(new Error('`endpoint` field'));
 	return 1;
 }
 if(!configuration.hasOwnProperty('audits') && Array.isArray(configuration.audits)) {
@@ -28,13 +28,6 @@ configuration.delay =
 	configuration.hasOwnProperty('delay') ?
 		configuration.delay :
 		0;
-if(!fs.existsSync(configuration.dir)) {
-	console.error(new Error('Ошибка при доступе к папке ' + configuration.dir));
-	return 1;
-}
-let audits = fs.readdirSync(configuration.dir).filter(audit => (
-	path.extname(audit) === '.xml' && configuration.audits.includes(audit)
-));	
 (async audits => {
 	for(let i = 0; i < audits.length; i++) {
 		const params = new URLSearchParams();
@@ -42,7 +35,7 @@ let audits = fs.readdirSync(configuration.dir).filter(audit => (
 		params.append('url', configuration.url_prefix + '/' + audits[i]);
 		try {
 			let r = await axios({
-				method: 'POST',
+				method: 'post',
 				url: configuration.endpoint,
 				validateStatus: s => s >= 200,
 				headers: {
@@ -51,14 +44,14 @@ let audits = fs.readdirSync(configuration.dir).filter(audit => (
 				data: params,
 			});
 			if(r.status === 200) {
-				console.log(i + '/' + audits.length);
+				console.log((i + 1) + '/' + audits.length);
 			} else {
-				console.log('!');
+				console.log((i + 1) + '!');
 			}
 		} catch (e) {
 			console.error(e);
-			return 1;
+			return;
 		}
 		await new Promise(_ => setTimeout(_, configuration.delay));
 	}
-})(audits);
+})(configuration.audits);
